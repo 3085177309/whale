@@ -1,0 +1,178 @@
+/*主页样式*/
+.layui-layout-admin .layui-header .layui-nav .layui-nav-mored {
+    border-color: transparent transparent #666!important;
+}
+.layui-side.layui-bg-black {
+    background-color: #20222a!important;
+}
+.layui-layout-right>.layui-nav-item>a {
+    color: rgb(3,3,3)!important;
+}
+.layui-layout-admin .layui-header .layui-nav .layui-nav-more {
+    border-top-color: #666;
+}
+.layui-nav-item.nav {
+    margin: 0 20px;
+}
+.layui-nav-item.nav a {
+    padding: 0;
+    cursor: pointer;
+}
+.layui-layout-admin .layui-side {
+    top: 0;
+    width: 220px;
+}
+.layui-layout-admin .layui-body {
+    top: 50px;
+    -webkit-transition: all .3s;
+}
+.layui-logo {
+    z-index: 1002;
+    padding: 0 15px;
+    width: 220px!important;
+    height: 50px!important;
+    line-height: 50px!important;
+    background-color: #20222a!important;
+    box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.15);
+    color: rgba(255,255,255,.8)!important;
+    box-sizing:border-box;
+    background-repeat:no-repeat;
+    background-position: center center
+}
+.layui-body, .layui-layout-admin .layui-footer {
+    left: 220px;
+    -webkit-transition: all .3s;
+}
+.layui-header ul li i {
+    color: #333;
+}
+.layui-layout-admin .layui-header {
+    background-color: #FFFFFF;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 1000;
+}
+.layui-body {
+    background-color: #f2f2f2;
+    overflow: hidden;
+    bottom: 0!important;
+}
+.layui-nav .layui-nav-item a:hover {
+    background: 0 0;
+}
+.layui-icon, .layui-nav .layui-nav-item.nav{
+    line-height: 50px;
+}
+.layui-nav-tree {
+    width: 220px;
+    background-color: #20222a!important;
+    box-sizing: border-box;
+    margin-top: 50px;
+}
+.layui-nav-item.nav>a>i {
+    font-size: 16px;
+}
+.layui-nav-tree>.layui-nav-item>a>i {
+    line-height: 40px!important;
+    margin-right: 5px;
+}
+.layui-nav-tree>.layui-nav-item>a>span {
+    right: 15px!important;
+}
+.layui-nav-tree>.layui-nav-item>a {
+    height: 40px!important;
+    line-height: 40px!important;
+    padding-top: 8px!important;
+    padding-bottom: 8px!important;
+}
+.layui-bg-black {
+    z-index: 1001;
+    -webkit-transition: all .3s;
+}
+
+.layui-side-scroll {
+    width: 240px;
+    overflow-x: hidden;
+}
+.layui-nav-itemed>.layui-nav-child {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.layui-nav .layui-nav-item {
+    line-height: 50px;
+}
+.layui-layout-right {
+    padding: 0;
+}
+.layui-layout-left {
+    left: 220px;
+    padding: 0 10px;
+}
+.layui-header>.layui-nav>.layui-nav-bar {
+    height: 2px!important;
+    top: 0px!important;
+    background-color: #20222A;
+}
+.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after {
+    background-color: #ffffff;
+}
+.layui-tab {
+    height: 40px;
+    background: #FFF;
+    margin: 0px;
+}
+.layui-tab-brief>.layui-tab-title .layui-this {
+    color: #20222A;
+}
+.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after {
+    border-bottom: 2px solid #20222A;
+}
+.layui-tab-title {
+    box-shadow: 0px 0px 2px 0 rgba(0,0,0,0.1);
+}
+
+/*侧边菜单栏隐藏*/
+.layadmin-side-shrink .layui-side, .layadmin-side-shrink .layui-nav-tree {
+    width: 60px;
+}
+.layadmin-side-shrink .layui-body,.layadmin-side-shrink .layui-footer {
+    left: 60px;
+}
+.layadmin-side-shrink .layui-layout-left {
+    left: 60px;
+}
+.layadmin-side-shrink .layui-logo {
+    width: 60px!important;
+    background-image: url("../img/logo-whale.png");
+    background-size:60% 60%;
+}
+.layadmin-side-shrink .layui-logo span {
+    display: none;
+}
+.layadmin-side-shrink .layui-bg-black .layui-nav-item cite, .layadmin-side-shrink .layui-bg-black .layui-nav .layui-nav-more {
+    display: none;
+    padding: 8px 0;
+}
+.layadmin-side-shrink .layui-nav-itemed>.layui-nav-child {
+    display: none;
+    padding: 8px 0;
+}
+
+.layui-tab-content  {
+    margin: 0 auto;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0px;
+}
+.layui-tab-item {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+ }
+
+

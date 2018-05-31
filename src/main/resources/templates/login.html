@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>登录</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="login-right">
+        <form class="layui-form layui-form-pane" action="">
+            <div class="login-hint-text">
+                <h3>仿LayUI登录</h3>
+                <p>欢迎登录后台管理系统</p>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-username"></i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required  lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <i class="layui-icon layui-icon-password"></i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="password" name="password" required lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <input type="checkbox" name="" title="记住密码" lay-skin="primary">
+                <span class="forget_password"><a>忘记密码?</a></span>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-normal">登录</button>
+            </div>
+        </form>
+    </div>
+</body>
+<script type="text/javascript" src="js/jquery.min.js" ></script>
+<script type="text/javascript" src="layui/layui.js"></script>
+<script>
+    layui.use('form', function(){
+        var form = layui.form;
+    });
+</script>
+</html>

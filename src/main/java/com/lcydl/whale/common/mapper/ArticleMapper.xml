@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcydl.whale.common.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.lcydl.whale.common.pojo.Article" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="cover_image" property="coverImage" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="hits" property="hits" jdbcType="INTEGER" />
+    <result column="allow_comment" property="allowComment" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="BIGINT" />
+    <result column="modifier" property="modifier" jdbcType="BIGINT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.lcydl.whale.common.pojo.Article" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, title, author, category_id, cover_image, status, hits, allow_comment, creator, 
+    modifier, created, modified
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.lcydl.whale.common.pojo.ArticleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lcydl.whale.common.pojo.ArticleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from article
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lcydl.whale.common.pojo.ArticleExample" >
+    delete from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lcydl.whale.common.pojo.Article" >
+    insert into article (id, title, author, 
+      category_id, cover_image, status, 
+      hits, allow_comment, creator, 
+      modifier, created, modified, 
+      content)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{categoryId,jdbcType=BIGINT}, #{coverImage,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{hits,jdbcType=INTEGER}, #{allowComment,jdbcType=INTEGER}, #{creator,jdbcType=BIGINT}, 
+      #{modifier,jdbcType=BIGINT}, #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcydl.whale.common.pojo.Article" >
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="author != null" >
+        author,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="coverImage != null" >
+        cover_image,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="hits != null" >
+        hits,
+      </if>
+      <if test="allowComment != null" >
+        allow_comment,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="modifier != null" >
+        modifier,
+      </if>
+      <if test="created != null" >
+        created,
+      </if>
+      <if test="modified != null" >
+        modified,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="coverImage != null" >
+        #{coverImage,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="hits != null" >
+        #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="allowComment != null" >
+        #{allowComment,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=BIGINT},
+      </if>
+      <if test="created != null" >
+        #{created,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modified != null" >
+        #{modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lcydl.whale.common.pojo.ArticleExample" resultType="java.lang.Integer" >
+    select count(*) from article
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update article
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.author != null" >
+        author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryId != null" >
+        category_id = #{record.categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="record.coverImage != null" >
+        cover_image = #{record.coverImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.hits != null" >
+        hits = #{record.hits,jdbcType=INTEGER},
+      </if>
+      <if test="record.allowComment != null" >
+        allow_comment = #{record.allowComment,jdbcType=INTEGER},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifier != null" >
+        modifier = #{record.modifier,jdbcType=BIGINT},
+      </if>
+      <if test="record.created != null" >
+        created = #{record.created,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modified != null" >
+        modified = #{record.modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update article
+    set id = #{record.id,jdbcType=BIGINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      category_id = #{record.categoryId,jdbcType=BIGINT},
+      cover_image = #{record.coverImage,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      hits = #{record.hits,jdbcType=INTEGER},
+      allow_comment = #{record.allowComment,jdbcType=INTEGER},
+      creator = #{record.creator,jdbcType=BIGINT},
+      modifier = #{record.modifier,jdbcType=BIGINT},
+      created = #{record.created,jdbcType=TIMESTAMP},
+      modified = #{record.modified,jdbcType=TIMESTAMP},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update article
+    set id = #{record.id,jdbcType=BIGINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      category_id = #{record.categoryId,jdbcType=BIGINT},
+      cover_image = #{record.coverImage,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      hits = #{record.hits,jdbcType=INTEGER},
+      allow_comment = #{record.allowComment,jdbcType=INTEGER},
+      creator = #{record.creator,jdbcType=BIGINT},
+      modifier = #{record.modifier,jdbcType=BIGINT},
+      created = #{record.created,jdbcType=TIMESTAMP},
+      modified = #{record.modified,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcydl.whale.common.pojo.Article" >
+    update article
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="coverImage != null" >
+        cover_image = #{coverImage,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="hits != null" >
+        hits = #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="allowComment != null" >
+        allow_comment = #{allowComment,jdbcType=INTEGER},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="modifier != null" >
+        modifier = #{modifier,jdbcType=BIGINT},
+      </if>
+      <if test="created != null" >
+        created = #{created,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modified != null" >
+        modified = #{modified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lcydl.whale.common.pojo.Article" >
+    update article
+    set title = #{title,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=BIGINT},
+      cover_image = #{coverImage,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      hits = #{hits,jdbcType=INTEGER},
+      allow_comment = #{allowComment,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=BIGINT},
+      modifier = #{modifier,jdbcType=BIGINT},
+      created = #{created,jdbcType=TIMESTAMP},
+      modified = #{modified,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcydl.whale.common.pojo.Article" >
+    update article
+    set title = #{title,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=BIGINT},
+      cover_image = #{coverImage,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      hits = #{hits,jdbcType=INTEGER},
+      allow_comment = #{allowComment,jdbcType=INTEGER},
+      creator = #{creator,jdbcType=BIGINT},
+      modifier = #{modifier,jdbcType=BIGINT},
+      created = #{created,jdbcType=TIMESTAMP},
+      modified = #{modified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
