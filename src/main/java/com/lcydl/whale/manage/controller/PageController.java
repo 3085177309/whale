@@ -9,7 +9,7 @@ public class PageController {
 
     @GetMapping("/{page}")
     public String method(@PathVariable("page") String page){
-        System.out.println("您所访问的页面是:   " + page);
+        System.out.println("您所访问的页面是: " + page);
         return page;
     }
 

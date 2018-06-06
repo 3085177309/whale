@@ -124,6 +124,9 @@
     background: #FFF;
     margin: 0px;
 }
+.layui-tab-brief>.layui-tab-title li {
+    color: #666;
+}
 .layui-tab-brief>.layui-tab-title .layui-this {
     color: #20222A;
 }
