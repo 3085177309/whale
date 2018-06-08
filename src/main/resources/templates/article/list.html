@@ -11,7 +11,7 @@
             <div class="border-table-title">
                 <div class="layui-btn-group">
                     <a class="layui-btn" id="add">增加</a>
-                    <a class="layui-btn">删除</a>
+                    <a class="layui-btn" id="delete-batch">删除</a>
                 </div>
             </div>
             <hr>
@@ -122,7 +122,7 @@
         //动态表格实例
         var tab =  table.render({
             elem: '#article-table'
-            ,height: 315
+            ,height: 400
             ,url: 'article/list' //数据接口
             ,page: true //开启分页
             ,cols: [
@@ -139,7 +139,7 @@
 
         //监听表格复选框选择
         table.on('checkbox(table)', function(obj){
-            console.log(obj)
+            /*console.log(obj)*/
         });
 
         //监听工具条
@@ -149,6 +149,7 @@
             var tr = obj.tr; //获得当前行 tr 的DOM对象
             if(layEvent === 'del'){ //删除
                 layer.confirm('确认删除该行?', function(index){
+                    console.log(obj)
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     layer.close(index);
                     //向服务端发送删除指令
@@ -156,15 +157,18 @@
                         url: "/article/delete/" + data.id,
                         type: 'DELETE',
                         success: function(data) {
-                            layer.msg(data.msg, {icon: 1});
+                            if (data.code === 0) {
+                                layer.msg(data.msg, {icon: 1});
+                            } else {
+                                layer.msg(data.msg, {icon: 2});
+                            }
                             //刷新数据表格
-                            /*tab.reload();*/
+                            table.reload();
                         }
                     });
                 });
             } else if(layEvent === 'edit'){ //编辑
                 //do something
-                console.log(data);
                 $.get("/article/edit/" + data.id, function (json) {
                     //填充数据到弹出层
                     $("input[name='id']").val(json.id);   //ID
@@ -199,9 +203,8 @@
                                 } else {
                                     layer.msg(data.msg, {icon: 2});
                                 }
-
                                 //刷新数据表格
-                                tab.reload();
+                                table.reload();
                             });
                         },
                         btn2 : function(index, layero){
@@ -240,6 +243,7 @@
             }
         });
 
+        //添加弹出层
         $("#add").on('click',function () {
             layer.open({
                 type: 1,
@@ -263,13 +267,43 @@
                         cleanForm();
                         //刷新数据表格
                         tab.reload();
-
                     });
                 },
                 btn2 : function(index, layero){
                     //按钮【返回】的回调
                 }
             });
+        });
+
+        //批量删除
+        $("#delete-batch").on('click',function () {
+            //获取选中的行
+            var checkStatus = table.checkStatus('article-table')//test即为基础参数id对应的值
+            /*var ids = "";*/
+            var ids = [];
+            if (checkStatus.data.length < 1) {
+                //没有被选中的行
+                layer.msg("没有被选中的行!", {icon: 7});
+                return;
+            }
+            console.log(checkStatus)
+            layer.confirm('确认删除选中的' + checkStatus.data.length + '行?', function(index){
+                for(var i=0;i<checkStatus.data.length;i++){
+                    ids[i] = checkStatus.data[i].id;
+                    /*checkStatus.data[i].del();*///删除对应行（tr）的DOM结构，并更新缓存
+                }
+                $.post("/article/batch", {"ids" : ids}, function (data) {
+                    if (data.code === 0) {
+                        layer.msg(data.msg, {icon: 1});
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+
+                });
+                layer.close(index);//关闭窗口
+                tab.reload();//表格重载
+            })
+
         });
 
         //清理表单项

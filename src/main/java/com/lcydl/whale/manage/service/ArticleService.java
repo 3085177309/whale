@@ -15,4 +15,6 @@ public interface ArticleService {
     R update(Article article);
 
     R delete(Long id);
+
+    R deleteBatch(Long[] ids);
 }

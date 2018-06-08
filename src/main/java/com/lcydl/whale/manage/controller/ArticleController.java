@@ -69,9 +69,15 @@ public class ArticleController {
         return articleService.delete(id);
     }
 
-    @PostMapping("/batchRemove")
-    public R batchRemove(){
-        return R.ok();
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @PostMapping("/batch")
+    @ResponseBody
+    public R deleteBatch(@RequestParam("ids[]") Long[] ids){
+        return articleService.deleteBatch(ids);
     }
 
 }

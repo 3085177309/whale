@@ -82,4 +82,18 @@ public class ArticleServiceImpl implements ArticleService {
             return R.error("删除失败!");
         }
     }
+
+    @Override
+    public R deleteBatch(Long[] ids) {
+        try {
+            //批量删除
+            for (Long id : ids) {
+                articleMapper.deleteByPrimaryKey(id);
+            }
+            return R.ok("批量删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error("批量删除失败!");
+        }
+    }
 }
