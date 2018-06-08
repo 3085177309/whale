@@ -2,10 +2,14 @@ package com.lcydl.whale.common.mapper;
 
 import com.lcydl.whale.common.pojo.Article;
 import com.lcydl.whale.common.pojo.ArticleExample;
+import com.lcydl.whale.common.util.Page;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ArticleMapper {
     int countByExample(ArticleExample example);
 
@@ -34,4 +38,11 @@ public interface ArticleMapper {
     int updateByPrimaryKeyWithBLOBs(Article record);
 
     int updateByPrimaryKey(Article record);
+
+    /**
+     * 自己写的接口
+     * @param page
+     * @return
+     */
+    List<Article> list(Page page);
 }

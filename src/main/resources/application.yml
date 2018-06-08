@@ -2,6 +2,9 @@ server:
   port: 86
   session-timeout: 1800
 spring:
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/whale?useUnicode=true&characterEncoding=utf8&useSSL=false
@@ -13,8 +16,4 @@ spring:
   mvc:
     static-path-pattern: /**
 mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-  mapper-locations: com/lcydl/whale/common/mapper/*Mapper.xml
-  typeAliasesPackage: com.lcydl.whale.common.mapper
-
+  mapper-locations: mybatis/**/*Mapper.xml

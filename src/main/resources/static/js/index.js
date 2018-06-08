@@ -6,8 +6,6 @@ layui.use(['element'], function(){
         var url = elem.attr('lay-href');
         var id = elem.attr('lay-id');
         var text = elem.text();
-        /*console.log(elem[0]);*/
-        console.log("id: " + id + "|url : " + url + "|text: " + text);
         //查看左边菜单栏是否已经收起
         var isShrink = $(".layadmin-side-shrink").length;
         if (isShrink > 0) {
@@ -15,7 +13,6 @@ layui.use(['element'], function(){
             mainLayout.removeClass('layadmin-side-shrink');
         }
         if (typeof(url) == "undefined") {
-            console.log("typeof here");
             return;
         }
         //查看所点击的导航页面是否已经激活
@@ -36,7 +33,6 @@ layui.use(['element'], function(){
     });
     //菜单隐藏显示
     hideBtn.on('click', function() {
-        console.log("菜单隐藏");
         if(!mainLayout.hasClass('layadmin-side-shrink')) {
             mainLayout.addClass('layadmin-side-shrink');
         } else {

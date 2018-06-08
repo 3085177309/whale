@@ -1,5 +1,7 @@
 package com.lcydl.whale.common.pojo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Article {
@@ -23,6 +25,7 @@ public class Article {
 
     private Long modifier;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date created;
 
     private Date modified;

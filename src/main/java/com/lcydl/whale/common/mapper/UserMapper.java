@@ -2,10 +2,13 @@ package com.lcydl.whale.common.mapper;
 
 import com.lcydl.whale.common.pojo.User;
 import com.lcydl.whale.common.pojo.UserExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface UserMapper {
     int countByExample(UserExample example);
 
