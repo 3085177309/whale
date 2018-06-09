@@ -1,79 +1,74 @@
 package com.lcydl.whale.manage.controller;
 
-import com.lcydl.whale.common.pojo.Article;
+import com.lcydl.whale.common.pojo.ArticleCat;
 import com.lcydl.whale.common.util.Page;
 import com.lcydl.whale.common.util.R;
-import com.lcydl.whale.manage.pojo.ArticleMessage;
+import com.lcydl.whale.manage.pojo.ArticleCatMessage;
 import com.lcydl.whale.manage.service.ArticleCatService;
-import com.lcydl.whale.manage.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/article")
-public class ArticleController {
-
-    @Autowired
-    private ArticleService articleService;
+@RequestMapping("/articleCat")
+public class ArticleCatController {
 
     @Autowired
     private ArticleCatService articleCatService;
 
     @GetMapping("")
-    public String article(Model model){
+    public String article(){
         //查询所有文章类别
-        model.addAttribute("cats", articleCatService.list()) ;
-        return "content/article";
+        return "content/article-cat";
     }
 
     @GetMapping("/list")
     @ResponseBody
-    public ArticleMessage list(Page page){
-        return articleService.list(page);
+    public ArticleCatMessage list(Page page){
+        return articleCatService.list(page);
     }
 
     /**
-     * 保存文章
-     * @param article
+     * 保存
+     * @param cat
      * @return
      */
     @PostMapping("/save")
     @ResponseBody
-    public R save(Article article){
-        return articleService.save(article);
+    public R save(ArticleCat cat){
+        R save = articleCatService.save(cat);
+        return save;
     }
 
     /**
-     * 获取编辑文章
+     * 获取
      * @return
      */
     @GetMapping("/edit/{id}")
     @ResponseBody
-    public Article edit(@PathVariable("id") Long id){
-        return articleService.get(id);
+    public ArticleCat edit(@PathVariable("id") Long id){
+        return articleCatService.get(id);
     }
 
     /**
-     * 编辑文章
+     * 编辑
      * @return
      */
     @PostMapping("/update")
     @ResponseBody
-    public R update(Article article){
-        return articleService.update(article);
+    public R update(ArticleCat cat){
+        return articleCatService.update(cat);
     }
 
     /**
-     * 删除文章
+     * 删除
      * @param id
      * @return
      */
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public R delete(@PathVariable("id") Long id){
-        return articleService.delete(id);
+        return articleCatService.delete(id);
     }
 
     /**
@@ -84,7 +79,6 @@ public class ArticleController {
     @PostMapping("/batch")
     @ResponseBody
     public R deleteBatch(@RequestParam("ids[]") Long[] ids){
-        return articleService.deleteBatch(ids);
+        return articleCatService.deleteBatch(ids);
     }
-
 }

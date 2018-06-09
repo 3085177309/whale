@@ -4,7 +4,7 @@ import com.lcydl.whale.common.pojo.Article;
 
 import java.util.List;
 
-public class ArticleDTO {
+public class ArticleMessage {
 
     private Integer code;
 

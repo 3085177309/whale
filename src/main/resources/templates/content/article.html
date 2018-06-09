@@ -24,8 +24,8 @@
         </div>
     </div>
 
-
     <div th:include="include::footer" ></div>
+
 </body>
 
 
@@ -53,13 +53,14 @@
                 <div class="layui-inline" style="width: 450px;">
                     <label class="layui-form-label">类别</label>
                     <div class="layui-input-block">
-                        <select name="categoryId" lay-verify="required">
+                        <select name="categoryId" lay-verify="required" >
                             <option value=""></option>
-                            <option value="0">北京</option>
+                            <option value="1" th:each="cat : ${cats}" th:value="${cat.name}" th:text="${cat.name}">分类</option>
+                            <!--<option value="0">北京</option>
                             <option value="1">上海</option>
                             <option value="2">广州</option>
                             <option value="3">深圳</option>
-                            <option value="4">杭州</option>
+                            <option value="4">杭州</option>-->
                         </select>
                     </div>
                 </div>
@@ -243,7 +244,7 @@
             }
         });
 
-        //添加弹出层
+        //点击添加打开弹出层
         $("#add").on('click',function () {
             layer.open({
                 type: 1,
@@ -251,6 +252,7 @@
                 area: ['850px','545px'],
                 title :'添加文章',
                 offset: '-0px',
+                maxmin: true,
                 btn: ['提交', '返回'],
                 yes : function(index, layero){
                     //按钮【提交】的回调
@@ -266,7 +268,7 @@
                         //清理表单项
                         cleanForm();
                         //刷新数据表格
-                        tab.reload();
+                        table.reload();
                     });
                 },
                 btn2 : function(index, layero){

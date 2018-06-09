@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include :: header">
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <!--表格-->
+    <div class="border-layout" >
+        <div class="border-framework">
+            <div class="border-table-title">
+                <div class="layui-btn-group">
+                    <a class="layui-btn" id="add">增加</a>
+                    <a class="layui-btn" id="delete-batch">删除</a>
+                </div>
+            </div>
+            <hr>
+            <div class="border-table-padding">
+
+                <!--数据表格-->
+                <table id="table" lay-filter="table"></table>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:include="include::footer" ></div>
+
+</body>
+
+
+<!--弹出层-->
+<div id="layer-popup">
+
+    <div class="border-table-padding" id="window" style="display: none">
+        <form class="layui-form" action="" id="form">
+            <input type="hidden" name="id" value="">
+            <div class="layui-form-item" style="margin-top: 15px">
+                <label class="layui-form-label">分类名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" required  lay-verify="required" placeholder="请输入分类名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+
+    layui.use(['table', 'form', 'layer'], function(){
+        var table = layui.table;
+        var form = layui.form;
+        var layer = layui.layer;
+
+        //动态表格实例
+        var tab =  table.render({
+            elem: '#table'
+            ,height: 400
+            ,url: 'articleCat/list' //数据接口
+            ,page: true //开启分页
+            ,cols: [
+                        [
+                            {type:'checkbox'}
+                            ,{field: 'id', title: 'ID', sort: true}
+                            ,{field: 'name', title: '分类名'}
+                            ,{field: 'created', title: '创建时间', sort: true}
+                            ,{fixed: 'right', align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+                        ]
+                    ]
+        });
+
+        //监听工具条
+        table.on('tool(table)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if(layEvent === 'del'){ //删除
+                layer.confirm('确认删除该行?', function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url: "/articleCat/delete/" + data.id,
+                        type: 'DELETE',
+                        success: function(data) {
+                            if (data.code === 0) {
+                                layer.msg(data.msg, {icon: 1});
+                            } else {
+                                layer.msg(data.msg, {icon: 2});
+                            }
+                            //刷新数据表格
+                            tab.reload();
+                        }
+                    });
+                });
+            } else if(layEvent === 'edit'){ //编辑
+                //do something
+                $.get("/articleCat/edit/" + data.id, function (json) {
+                    //填充数据到弹出层
+                    $("input[name='id']").val(json.id);   //ID
+                    $("input[name='name']").val(json.name);   //分类名
+                    $("input[name='created']").val(json.created);   //创建时间
+                    //打开弹出层
+                    layer.open({
+                        type: 1,
+                        content: $('#window'), //这里content是一个普通的String
+                        area: ['850px','545px'],
+                        title :'修改类别',
+                        offset: '-0px',
+                        btn: ['提交', '返回'],
+                        yes : function(index, layero){
+                            //按钮【提交】的回调
+                            //ajax提交表单
+                            $.post("/articleCat/update", $("#form").serialize(), function (data) {
+                                if (data.code === 0) {
+                                    layer.msg(data.msg, {icon: 1});
+                                    //关闭弹出层
+                                    layer.close(index);
+                                } else {
+                                    layer.msg(data.msg, {icon: 2});
+                                }
+                                //刷新数据表格
+                                tab.reload();
+                            });
+                        },
+                        btn2 : function(index, layero){
+                            //按钮【返回】的回调
+                        }
+                    });
+                    cleanForm();
+                });
+            }
+        });
+
+        //点击添加打开弹出层
+        $("#add").on('click',function () {
+            layer.open({
+                type: 1,
+                content: $('#window'), //这里content是一个普通的String
+                title :'添加类别',
+                area: '450px',
+                btn: ['提交', '返回'],
+                yes : function(index, layero){
+                    //按钮【提交】的回调
+                    //ajax提交表单
+                    $.post("/articleCat/save", $("#form").serialize(), function (data) {
+                        if (data.code === 0) {
+                            layer.msg(data.msg, {icon: 1});
+                            //关闭弹出层
+                            layer.close(index);
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                        //清理表单项
+                        cleanForm();
+                        //刷新数据表格
+                        tab.reload();
+                    });
+                },
+                btn2 : function(index, layero){
+                    //按钮【返回】的回调
+                }
+            });
+        });
+
+        //批量删除
+        $("#delete-batch").on('click',function () {
+            //获取选中的行
+            var checkStatus = table.checkStatus('table')//test即为基础参数id对应的值
+            var ids = [];
+            if (checkStatus.data.length < 1) {
+                //没有被选中的行
+                layer.msg("没有被选中的行!", {icon: 7});
+                return;
+            }
+            console.log(checkStatus)
+            layer.confirm('确认删除选中的' + checkStatus.data.length + '行?', function(index){
+                for(var i=0;i<checkStatus.data.length;i++){
+                    ids[i] = checkStatus.data[i].id;
+                }
+                $.post("/articleCat/batch", {"ids" : ids}, function (data) {
+                    if (data.code === 0) {
+                        layer.msg(data.msg, {icon: 1});
+                    } else {
+                        layer.msg(data.msg, {icon: 2});
+                    }
+
+                });
+                layer.close(index);//关闭窗口
+                tab.reload();//表格重载
+            })
+
+        });
+        
+        function cleanForm() {
+            $('#form')[0].reset();  //重置表单内容
+        }
+
+    });
+</script>
+
+<!-- 表格工具条 -->
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <!-- 这里同样支持 laytpl 语法，如： -->
+</script>
+
+</html>

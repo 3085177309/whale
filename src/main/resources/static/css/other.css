@@ -1,4 +1,7 @@
 /*其他页面样式*/
+html {
+    overflow: hidden;
+}
 .border-layout {
     background-color: #FFF;
     margin: 15px;

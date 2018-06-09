@@ -24,7 +24,7 @@ layui.use(['element'], function(){
             //打开相关页面,添加选项卡
             element.tabAdd('tab', {
                 title: text,
-                content: '<iframe src="' + url + '" name="iframe' + id + '" class="iframe" frameborder="0" data-id="' + id + '" scrolling="auto" width="100%"  height="100%"></iframe>',
+                content: '<iframe src="' + url + '" name="iframe' + id + '" class="iframe" frameborder="0" data-id="' + id + '" scrolling="auto" width="100%"  height="93%"></iframe>',
                 id: id
             });
             element.tabChange('tab', id);
