@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:include="include :: header">
+    <meta charset="UTF-8">
+</head>
+<!--<link rel="stylesheet" href="/plugins/awesome/css/font-awesome.css"/>-->
+<!--<link rel="stylesheet" href="/plugins/zTree/css/zTreeStyle/zTreeStyle.css"/>-->
+<!--<link rel="stylesheet" href="/plugins/zTree/css/awesomeStyle/awesome.css"/>-->
+<link rel="stylesheet" href="/plugins/zTree/css/metroStyle/metroStyle.css"/>
+<!--<link rel="stylesheet" href="/plugins/treegrid/css/jquery.treegrid.css"/>-->
+<link rel="stylesheet" href="/css/system/permission.css">
+<body>
+
+    <!--表格-->
+    <div class="border-layout" >
+        <div class="border-framework">
+            <div class="border-table-title">
+                <div class="layui-btn-group">
+                    <a class="layui-btn" id="add">增加</a>
+                    <a class="layui-btn" id="delete-batch">删除</a>
+                </div>
+            </div>
+            <hr>
+            <div class="border-table-padding">
+
+                <div class="permission-tree">
+                    <div class="tree-border">
+                        <div class="tree-tip">权限树形菜单</div>
+                        <ul id="treeDemo" class="ztree"></ul>
+                    </div>
+                </div>
+
+                <div class="permission-table">
+                    <!--数据表格-->
+                    <table id="table" lay-filter="table"></table>
+                    <!--树形表格-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:include="include::footer" ></div>
+    <script type="application/javascript" src="/plugins/zTree/js/jquery.ztree.core.min.js"></script>
+    <script type="application/javascript" src="/plugins/zTree/js/jquery.ztree.exedit.min.js"></script>
+    <script type="application/javascript" src="/js/system/permission.js"></script>
+    <!--<script type="application/javascript" src="/plugins/treegrid/js/jquery.treegrid.min.js"></script>-->
+</body>
+
+<!--弹出层-->
+<div id="layer-popup">
+
+    <div class="border-table-padding" id="add-window" style="display: none">
+        <form class="layui-form" action="" id="form">
+            <input type="hidden" name="id" value="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属</label>
+                <div class="layui-input-block">
+                    <input id="level" type="text" placeholder="根目录" class="layui-input"  style="background-color: #ececec" disabled>
+                </div>
+                <input type="hidden" id="parentId" name="parentId" value="0">
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">权限名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入权限名称" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">权限地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="url" placeholder="请输入权限地址" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">权限标识</label>
+                <div class="layui-input-block">
+                    <input type="text" name="perms" placeholder="请输入权限标识" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item icon-show">
+                <label class="layui-form-label">图标</label>
+                <div class="layui-input-block">
+                    <button id="icon" type="button" class="layui-btn layui-btn-warm" style="background-color: #ff5b68">选择图标</button>
+                </div>
+                <input type="hidden" id="iconClass" name="icon">
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<!--zTree树形菜单-->
+<script>
+    var setting = {
+        edit: {
+            enable: true
+        },
+        view: {
+            addHoverDom: addHoverDom,
+            removeHoverDom: removeHoverDom,
+            selectedMulti: false
+
+        },
+        async: {
+            enable: true,
+            url:"permission/list",
+            autoParam:[],
+            contentType: "application/json",
+            otherParam:{},
+            dataFilter: filter //异步获取的数据filter 里面可以进行处理  filter 在下面
+        },
+        data: {
+            simpleData: {
+                enable:true,
+                idKey: "id",
+                pIdKey: "parentId",
+                rootPId: 0
+            }
+        },
+        callback: {
+            beforeEditName: beforeEditName,
+            beforeRemove: beforeRemove
+        }
+    };
+
+    //树形菜单添加方法
+    function addHoverDom(treeId, treeNode) {
+        var sObj = $("#" + treeNode.tId + "_span");
+        if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+        var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+            + "' title='add node' onfocus='this.blur();'></span>";
+        sObj.after(addStr);
+        var btn = $("#addBtn_"+treeNode.tId);
+        if (btn) btn.bind("click", function(){
+            //设置弹出层数据
+            //存入Parent_ID
+            $("#parentId").val(treeNode.id);
+            $("#level").attr("placeholder", treeNode.name);
+            //打开弹出层,进行添加
+            layer.open({
+                type: 1,
+                content: $('#add-window'), //这里content是一个普通的String
+                area: ['550px','545px'],
+                title :'添加权限',
+                offset: '-0px',
+                maxmin: true,
+                btn: ['提交', '返回'],
+                yes : function(index, layero){
+                    //按钮【提交】的回调
+                    //ajax提交表单
+                    $.post("/permission/save", $("#form").serialize(), function (data) {
+                        if (data.code === 0) {
+                            layer.msg(data.msg, {icon: 1});
+                            //关闭弹出层
+                            layer.close(index);
+                            //添加新的分支
+                            var perm = eval(data.data);
+                            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                            zTree.addNodes(treeNode, {id:perm.id, pId:perm.parentId, name:perm.name});
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                        //清理表单项
+                        cleanForm();
+                        //刷新数据表格
+                        /*tab.reload();*/
+                    });
+                },
+                btn2 : function(index, layero){
+                    //按钮【返回】的回调
+                }
+            });
+            return false;
+        });
+    };
+
+    //数据处理
+    function filter(treeId, parentNode, childNodes) {
+        if (!childNodes) return null;
+        for (var i=0, l=childNodes.length; i<l; i++) {
+            childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+        }
+        return childNodes;
+    }
+
+
+    //清除遗留按钮
+    function removeHoverDom(treeId, treeNode) {
+        $("#addBtn_"+treeNode.tId).unbind().remove();
+    };
+
+    //修改按钮
+    function beforeEditName(treeId, treeNode) {
+        /*className = (className === "dark" ? "":"dark");
+        showLog("[ "+getTime()+" beforeEditName ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);*/
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        /*zTree.selectNode(treeNode);
+        setTimeout(function() {
+            if (confirm("进入节点 -- " + treeNode.name + " 的编辑状态吗？")) {
+                setTimeout(function() {
+                    zTree.editName(treeNode);
+                }, 0);
+            }
+        }, 0);*/
+        $.get("/permission/edit/" + treeNode.id, function (json) {
+            //填充数据到弹出层
+            $("input[name='id']").val(json.id);   //ID
+            $("input[name='name']").val(json.name);   //名称
+            $("input[name='url']").val(json.url);   //URL
+            $("input[name='perms']").val(json.perms);   //权限标识
+            $("#icon").html("<i class=\"" + json.icon + "\"></i>");   //图标
+            $('#iconClass').val(json.icon);
+            //打开弹出层
+            layer.open({
+                type: 1,
+                content: $('#add-window'), //这里content是一个普通的String
+                area: ['550px','545px'],
+                title :'修改权限',
+                offset: '-0px',
+                btn: ['提交', '返回'],
+                yes : function(index, layero){
+                    //按钮【提交】的回调
+                    //ajax提交表单
+                    $.post("/permission/update", $("#form").serialize(), function (data) {
+                        if (data.code === 0) {
+                            layer.msg(data.msg, {icon: 1});
+                            //关闭弹出层
+                            layer.close(index);
+                        } else {
+                            layer.msg(data.msg, {icon: 2});
+                        }
+                        //刷新数据表格
+                        tab.reload();
+                    });
+                },
+                btn2 : function(index, layero){
+                    //按钮【返回】的回调
+                }
+            });
+        });
+        //清理表单项
+        cleanForm();
+        return false;
+    }
+
+    /*function onRename(e, treeId, treeNode, isCancel) {
+        showLog((isCancel ? "<span style='color:red'>":"") + "[ "+getTime()+" onRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>":""));
+    }*/
+
+    //删除回调
+    function beforeRemove(treeId, treeNode) {
+        className = (className === "dark" ? "":"dark");
+        showLog("[ "+getTime()+" beforeRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+        zTree.selectNode(treeNode);
+        return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
+    }
+
+    /*function onRemove(e, treeId, treeNode) {
+        showLog("[ "+getTime()+" onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+    }*/
+
+    $(function () {
+        $.fn.zTree.init($("#treeDemo"), setting);
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        var nodes = treeObj.getNodes();
+        for (var i = 0; i < nodes.length; i++) { //设置节点展开
+            treeObj.expandNode(nodes[i], true, false, true);
+        }
+    });
+    
+</script>
+
+<!-- 表格工具条 -->
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">
+        <i class="layui-icon layui-icon-edit"></i>
+    </a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+        <i class="layui-icon layui-icon-delete"></i>
+    </a>
+</script>
+<!-- 这里同样支持 laytpl 语法，如： -->
+
+</html>

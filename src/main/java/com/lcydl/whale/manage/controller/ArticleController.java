@@ -6,6 +6,7 @@ import com.lcydl.whale.common.util.R;
 import com.lcydl.whale.manage.pojo.ArticleMessage;
 import com.lcydl.whale.manage.service.ArticleCatService;
 import com.lcydl.whale.manage.service.ArticleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ public class ArticleController {
     private ArticleCatService articleCatService;
 
     @GetMapping("")
+    @RequiresPermissions("article")
     public String article(Model model){
         //查询所有文章类别
         model.addAttribute("cats", articleCatService.list()) ;

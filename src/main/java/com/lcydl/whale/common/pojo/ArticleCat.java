@@ -5,9 +5,9 @@ import java.util.Date;
 public class ArticleCat {
     private Long id;
 
-    private String name;
+    private Long parentId;
 
-    private Long fid;
+    private String name;
 
     private Integer status;
 
@@ -23,20 +23,20 @@ public class ArticleCat {
         this.id = id;
     }
 
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public Long getFid() {
-        return fid;
-    }
-
-    public void setFid(Long fid) {
-        this.fid = fid;
     }
 
     public Integer getStatus() {

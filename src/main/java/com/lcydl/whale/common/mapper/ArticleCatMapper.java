@@ -32,11 +32,5 @@ public interface ArticleCatMapper {
 
     int updateByPrimaryKey(ArticleCat record);
 
-
-    /**
-     * 自己写的接口
-     * @param page
-     * @return
-     */
     List<ArticleCat> list(Page page);
 }

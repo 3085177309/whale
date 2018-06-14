@@ -179,4 +179,7 @@
     height: 100%;
     box-sizing: border-box;
  }
-
+.layui-nav-tree .layui-nav-child a {
+    padding-left: 45px;
+    padding-right: 30px;
+}

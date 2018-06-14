@@ -3,8 +3,8 @@
 <mapper namespace="com.lcydl.whale.common.mapper.ArticleCatMapper" >
   <resultMap id="BaseResultMap" type="com.lcydl.whale.common.pojo.ArticleCat" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="fid" property="fid" jdbcType="BIGINT" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="created" property="created" jdbcType="TIMESTAMP" />
     <result column="modified" property="modified" jdbcType="TIMESTAMP" />
@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, fid, status, created, modified
+    id, parent_id, name, status, created, modified
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lcydl.whale.common.pojo.ArticleCatExample" >
     select
@@ -101,10 +101,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lcydl.whale.common.pojo.ArticleCat" >
-    insert into article_cat (id, name, fid, 
+    insert into article_cat (id, parent_id, name, 
       status, created, modified
       )
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{fid,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
       #{status,jdbcType=INTEGER}, #{created,jdbcType=TIMESTAMP}, #{modified,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -114,11 +114,11 @@
       <if test="id != null" >
         id,
       </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
       <if test="name != null" >
         name,
-      </if>
-      <if test="fid != null" >
-        fid,
       </if>
       <if test="status != null" >
         status,
@@ -134,11 +134,11 @@
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="fid != null" >
-        #{fid,jdbcType=BIGINT},
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
@@ -163,11 +163,11 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=BIGINT},
+      </if>
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
-      </if>
-      <if test="record.fid != null" >
-        fid = #{record.fid,jdbcType=BIGINT},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=INTEGER},
@@ -186,8 +186,8 @@
   <update id="updateByExample" parameterType="map" >
     update article_cat
     set id = #{record.id,jdbcType=BIGINT},
+      parent_id = #{record.parentId,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
-      fid = #{record.fid,jdbcType=BIGINT},
       status = #{record.status,jdbcType=INTEGER},
       created = #{record.created,jdbcType=TIMESTAMP},
       modified = #{record.modified,jdbcType=TIMESTAMP}
@@ -198,11 +198,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lcydl.whale.common.pojo.ArticleCat" >
     update article_cat
     <set >
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="fid != null" >
-        fid = #{fid,jdbcType=BIGINT},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
@@ -218,8 +218,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lcydl.whale.common.pojo.ArticleCat" >
     update article_cat
-    set name = #{name,jdbcType=VARCHAR},
-      fid = #{fid,jdbcType=BIGINT},
+    set parent_id = #{parentId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       created = #{created,jdbcType=TIMESTAMP},
       modified = #{modified,jdbcType=TIMESTAMP}
@@ -227,8 +227,11 @@
   </update>
 
 
-  <!--自己写的接口-->
-  <select id="list" resultMap="BaseResultMap">
-    select * from article_cat limit #{offset}, #{limit}
-  </select>
+
+    <!--自己写的接口-->
+    <select id="list" resultMap="BaseResultMap">
+      select * from article_cat limit #{offset}, #{limit}
+    </select>
+
+
 </mapper>

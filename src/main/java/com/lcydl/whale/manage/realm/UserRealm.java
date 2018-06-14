@@ -1,18 +1,19 @@
 package com.lcydl.whale.manage.realm;
 
-import com.lcydl.whale.common.mapper.UserMapper;
 import com.lcydl.whale.common.pojo.User;
-import com.lcydl.whale.common.pojo.UserExample;
+import com.lcydl.whale.manage.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 
 public class UserRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
 
     /**
@@ -22,6 +23,7 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection prin) {
+        /*SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();*/
         return null;
     }
 
@@ -33,21 +35,17 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-
         String username = (String) token.getPrincipal();    //获取用户名
         String password = new String((char[]) token.getCredentials());  //获取密码
-        // 查询用户信息
-        UserExample example = new UserExample();
-        UserExample.Criteria criteria = example.createCriteria();
-        criteria.andUsernameEqualTo(username);
-        User user = userMapper.selectByExample(example).get(0); //根据用户名查询用户信息
+        // 根据用户名查询用户信息
+        User user = userService.get(username);
         // 账号不存在
         if (user == null) {
-            throw new UnknownAccountException("账号或密码不正确!");
+            throw new UnknownAccountException("用户不存在!");
         }
-        // 密码错误
+        // 密码校验
         if (!password.equals(user.getPassword())) {
-            throw new IncorrectCredentialsException("账号或密码不正确!");
+            throw new IncorrectCredentialsException("密码不正确!");
         }
         return new SimpleAuthenticationInfo(user, password, getName());
     }

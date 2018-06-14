@@ -5,6 +5,7 @@ import com.lcydl.whale.common.util.Page;
 import com.lcydl.whale.common.util.R;
 import com.lcydl.whale.manage.pojo.ArticleCatMessage;
 import com.lcydl.whale.manage.service.ArticleCatService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ public class ArticleCatController {
     private ArticleCatService articleCatService;
 
     @GetMapping("")
+    @RequiresPermissions("articleCat")
     public String article(){
         //查询所有文章类别
         return "content/article-cat";

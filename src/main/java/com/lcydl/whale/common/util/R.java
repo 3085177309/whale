@@ -12,6 +12,12 @@ public class R extends HashMap<String, Object> {
 		put("msg", "操作成功");
 	}
 
+	public R(Object data) {
+		put("code", 0);
+		put("msg", "操作成功");
+		put("data", data);
+	}
+
 	public static R error() {
 		return error(1, "操作失败");
 	}
@@ -41,6 +47,10 @@ public class R extends HashMap<String, Object> {
 
 	public static R ok() {
 		return new R();
+	}
+
+	public static R ok(Object data) {
+		return new R(data);
 	}
 
 	@Override

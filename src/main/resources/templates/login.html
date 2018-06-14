@@ -7,11 +7,10 @@
     <link rel="shortcut icon" href="img/favicon.ico" />
     <link rel="stylesheet" href="layui/css/layui.css">
     <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="plugins/verify/jigsaw.css">
 </head>
 <body>
     <div class="login-right">
-        <form class="layui-form layui-form-pane" action="">
+        <form class="layui-form layui-form-pane" action="" id="login-form">
             <div class="login-hint-text">
                 <h3>仿LayUI登录</h3>
                 <p>欢迎登录后台管理系统</p>
@@ -22,7 +21,7 @@
                     <i class="layui-icon layui-icon-username"></i>
                 </label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" required  lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
+                    <input type="text" name="username" placeholder="用户名" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -30,7 +29,7 @@
                     <i class="layui-icon layui-icon-password"></i>
                 </label>
                 <div class="layui-input-block">
-                    <input type="password" name="password" required lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+                    <input type="password" name="password" placeholder="密码" autocomplete="off" class="layui-input">
                 </div>
             </div>
 
@@ -40,17 +39,38 @@
                 <span class="forget_password"><a>忘记密码?</a></span>
             </div>
             <div class="layui-form-item">
-                <button class="layui-btn layui-btn-normal">登录</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="login">登录</button>
             </div>
         </form>
     </div>
 </body>
 <script type="text/javascript" src="js/jquery.min.js" ></script>
 <script type="text/javascript" src="layui/layui.js"></script>
-<script type="text/javascript" src="plugins/verify/jigsaw.js"></script>
 <script>
-    layui.use('form', function(){
+    layui.use(['form', 'layer'], function(){
         var form = layui.form;
+        var layer = layui.layer;
+
+        $("#login").click(function () {
+            var username = $("input[name='username']").val();
+            var password = $("input[name='password']").val();
+            if (username === '') {
+                layer.msg("用户名不能为空!", {icon: 5, anim: 6, offset:  ['217px', '990px']});
+                return;
+            }
+            if (password === '') {
+                layer.msg("密码不能为空!", {icon: 5, anim: 6, offset:  ['217px', '990px']});
+                return;
+            }
+            $.post("/login", $("#login-form").serialize(), function (data) {
+                if (data.code === 0) {
+                    layer.msg("登录成功!正在进行跳转...", {icon: 1});
+                    setTimeout("window.location.href = '/index'",1000);
+                }
+            });
+        });
+
+
     });
 </script>
 </html>

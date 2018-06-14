@@ -165,6 +165,66 @@ public class ArticleCatExample {
             return (Criteria) this;
         }
 
+        public Criteria andParentIdIsNull() {
+            addCriterion("parent_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdIsNotNull() {
+            addCriterion("parent_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdEqualTo(Long value) {
+            addCriterion("parent_id =", value, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdNotEqualTo(Long value) {
+            addCriterion("parent_id <>", value, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdGreaterThan(Long value) {
+            addCriterion("parent_id >", value, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("parent_id >=", value, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdLessThan(Long value) {
+            addCriterion("parent_id <", value, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdLessThanOrEqualTo(Long value) {
+            addCriterion("parent_id <=", value, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdIn(List<Long> values) {
+            addCriterion("parent_id in", values, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdNotIn(List<Long> values) {
+            addCriterion("parent_id not in", values, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdBetween(Long value1, Long value2) {
+            addCriterion("parent_id between", value1, value2, "parentId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentIdNotBetween(Long value1, Long value2) {
+            addCriterion("parent_id not between", value1, value2, "parentId");
+            return (Criteria) this;
+        }
+
         public Criteria andNameIsNull() {
             addCriterion("name is null");
             return (Criteria) this;
@@ -232,66 +292,6 @@ public class ArticleCatExample {
 
         public Criteria andNameNotBetween(String value1, String value2) {
             addCriterion("name not between", value1, value2, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidIsNull() {
-            addCriterion("fid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidIsNotNull() {
-            addCriterion("fid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidEqualTo(Long value) {
-            addCriterion("fid =", value, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidNotEqualTo(Long value) {
-            addCriterion("fid <>", value, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidGreaterThan(Long value) {
-            addCriterion("fid >", value, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidGreaterThanOrEqualTo(Long value) {
-            addCriterion("fid >=", value, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidLessThan(Long value) {
-            addCriterion("fid <", value, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidLessThanOrEqualTo(Long value) {
-            addCriterion("fid <=", value, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidIn(List<Long> values) {
-            addCriterion("fid in", values, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidNotIn(List<Long> values) {
-            addCriterion("fid not in", values, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidBetween(Long value1, Long value2) {
-            addCriterion("fid between", value1, value2, "fid");
-            return (Criteria) this;
-        }
-
-        public Criteria andFidNotBetween(Long value1, Long value2) {
-            addCriterion("fid not between", value1, value2, "fid");
             return (Criteria) this;
         }
 

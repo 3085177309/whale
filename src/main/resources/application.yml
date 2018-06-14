@@ -17,3 +17,7 @@ spring:
     static-path-pattern: /**
 mybatis:
   mapper-locations: mybatis/**/*Mapper.xml
+logging:
+  level:
+    root: info
+    com.lcydl: debug
